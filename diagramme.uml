@@ -1,0 +1,76 @@
+@startuml
+skinparam style strictuml
+left to right direction
+skinparam packageStyle rect
+
+actor "Résident" as res
+actor "Prestataire" as pres
+actor "Agent" as agent
+actor "Administrateur" as admin
+
+rectangle "Système MaVille" {
+    
+    ' --- SERVICES CITOYENS ---
+    together {
+        usecase "S'inscrire et s'informer" as UC_inscrire
+        usecase "Consulter les actualités" as UC_actu
+        usecase "Consulter les travaux" as UC_travaux
+        usecase "S'abonner aux notifications" as UC_sub
+        usecase "Recevoir des notifications" as UC_rec_notif
+        usecase "Soumettre un signalement" as UC_soumettre_sig
+        usecase "Consulter ses requêtes" as UC_consulter_req
+    }
+
+    ' --- SERVICES PRESTATAIRES ---
+    together {
+        usecase "Consulter fiches problèmes" as UC_fiches_prob
+        usecase "Soumettre une candidature" as UC_candidature
+        usecase "Mettre à jour un projet" as UC_maj_projet
+        usecase "Consulter appel d'offre" as UC_appel_offre
+        usecase "Déposer et suivre soumission" as UC_suivre_soumission
+    }
+
+    ' --- GESTION & ADMINISTRATION ---
+    together {
+        usecase "Valider une candidature" as UC_val_cand
+        usecase "Gérer les fiches problèmes" as UC_gerer_fiches
+        usecase "Notifier les résidents" as UC_notif_res
+        usecase "Examiner signalement" as UC_exam_sig
+        usecase "Assigner priorité" as UC_priorite
+        usecase "Évaluer soumission" as UC_eval_soum
+        usecase "Approuver et rejeter offre" as UC_app_rej_offre
+        usecase "Gérer les comptes utilisateurs" as UC_gerer_comptes
+    }
+
+    ' --- RELATIONS INCLUDE ---
+    UC_sub .> UC_rec_notif : <<include>>
+    UC_gerer_fiches .> UC_notif_res : <<include>>
+}
+
+' --- LIAISONS RÉSIDENT ---
+res --> UC_inscrire
+res --> UC_actu
+res --> UC_travaux
+res --> UC_sub
+res --> UC_soumettre_sig
+res --> UC_consulter_req
+
+' --- LIAISONS PRESTATAIRE ---
+pres --> UC_fiches_prob
+pres --> UC_candidature
+pres --> UC_maj_projet
+pres --> UC_appel_offre
+pres --> UC_suivre_soumission
+
+' --- LIAISONS AGENT ---
+agent --> UC_val_cand
+agent --> UC_gerer_fiches
+agent --> UC_exam_sig
+agent --> UC_priorite
+agent --> UC_eval_soum
+agent --> UC_app_rej_offre
+
+' --- LIAISONS ADMINISTRATEUR ---
+admin --> UC_gerer_comptes
+
+@enduml
